@@ -1,0 +1,31 @@
+{
+  "name": "vuedemo",
+  "version": "1.0.0",
+  "description": "A vue.js demo",
+  "main": "app.js",
+  "dependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.0.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "jquery": "^3.2.1",
+    "leancloud-storage": "^2.3.2",
+    "lodash": "^4.17.4",
+    "vue": "^2.3.3",
+    "webpack": "^2.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrankFang/xxx.git"
+  },
+  "devDependencies": {
+    "webpack": "^2.4.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

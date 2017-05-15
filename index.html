@@ -1,0 +1,99 @@
+<html>
+	<head>
+	<title>webpack 2 demo</title>
+	<meta charset=utf-8>
+	<style>
+		#signInAndSignUp{
+			width: 100%;
+			height: 100%;
+			background-color: #233;
+			display: flex;
+			align-items: center;			
+			justify-content: center;
+		}
+		#signInAndSignUp>div{
+			border: 1px solid;
+			border-radius: 4px;
+			min-width: 20em;
+			background: rgba(255,255,255,0.6);
+			border: 1px solid #aaa;
+			box-shadow: 0 0 1em hsla(0,0%,0%,0.35);
+		}
+		#signInAndSignUp>div>div{
+			width:100%;
+			display: flex;
+			justify-content: space-around;
+		}
+		#signInAndSignUp>div>div label{
+			margin-top: 20px;
+			border-radius: 3px;
+			padding: 1em 0;
+			text-align: center;
+			width:40%;
+			display: inline-block;
+			background-color: #233;
+			color:white;
+		}
+		#signInAndSignUp>div>div label input.test-radio{
+			display: none;
+		}
+		#signInAndSignUp form>div{display: flex; padding: .4em 0; }
+		#signInAndSignUp form{width:100%;}
+		#signInAndSignUp form div{width:100%;display: flex;justify-content: center;align-items: center;flex-direction: column;}
+		#signInAndSignUp form input{width:90%;height:2rem;border:0;border-radius: 2px;}
+	</style>
+	</head>
+<body>
+	<div id="app">
+		<section id="signInAndSignUp" v-if="!currentUser">
+			<div>
+				<div>
+					<label><input class="test-radio" type="radio" v-model="actionType" name="type" value="signUp">注册</label>
+					<label><input class="test-radio" type="radio" v-model="actionType" name="type" value="login">登陆</label>
+				</div>
+				<div class="signUp" v-if="actionType == 'signUp'">
+					<form @submit.prevent = signUp>
+						<div class="formRow">
+						<input placeholder="用户名" type="text" v-model="formData.username">
+						</div>
+						<div class="formRow">
+						<input placeholder="密码" type="password" v-model="formData.password">
+						</div>
+						<div class="formActions">
+							<input type="submit" value="注册">
+						</div>
+					</form>
+				</div>
+				<div class="login" v-if="actionType == 'login'">
+					<form @submit.prevent = login>
+						<div class="formRow">
+						<input placeholder="用户名" type="text" v-model="formData.username">
+						</div>
+						<div class="formRow">
+						<input placeholder="密码" type="password" v-model="formData.password">
+						</div>
+						<div class="formActions">
+						<input type="submit" value="登入">
+						</div>
+					</form>
+				</div>
+			</div>			
+		</section>
+		<section id="todo" v-if="currentUser">
+			<p><button @click="logout">登出</button></p>
+			<div class='newTask'>
+				<input type="text" v-on:keyup.enter='addTodo' v-model='newTodo'>
+			</div>
+			<ol class="todos"> 
+				<li v-for="todo in todoList">
+					<input type="checkbox"  v-model='todo.done'>{{todo.title}}
+					<span v-if='todo.done'>已完成</span>
+					<span v-else>未完成</span>
+					<button @click="removeTodo(todo)">x</button>
+				</li>
+			</ol>
+  		</section>
+  	</div>	
+<script src="bundle.js"></script>
+</body>
+</html>
