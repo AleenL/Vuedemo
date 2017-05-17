@@ -23,7 +23,11 @@ var app = new Vue({
    },
    created:function(){
    	this.currentUser = this.getCurrentUser();
-   	if(this.currentUser){
+   	this.fetchTodos()
+   },
+   methods:{
+   	fetchTodos:function(){
+   		if(this.currentUser){
    		var query = new AV.Query('AllTodos')
    		query.find().then((todos) => {
    			let avAllTodos = todos[0]
@@ -32,10 +36,9 @@ var app = new Vue({
    			this.todoList.id = id
    		},function(error){
    			console.log(error)
-   		})
-   	}
-   },
-   methods:{
+   			})
+   		}
+   	},
    	updataTodos:function(){
    		let dataString = JSON.stringify(this.todoList)
    		let avTodos = AV.Object.createWithoutData('AllTodos',this.todoList.id)
@@ -56,9 +59,9 @@ var app = new Vue({
    		avTodos.setACL(acl)
        	avTodos.save().then((todo)=>{
        		this.todoList.id = todo.id
-       		alert('save finish')
+       		console.log('save finish')
        	},function(error){
-       		alert('save filed')
+       		console.log('save filed')
        	})
    	},
    	saveOrUpdateTodos: function(){
@@ -95,6 +98,7 @@ var app = new Vue({
    			this.currentUser = this.getCurrentUser()
    			this.user = this.formData.username
    		},function(error){});
+   		this.fetchTodos()
    	},
    	getCurrentUser: function(){
    		let current = AV.User.current()

@@ -24536,22 +24536,25 @@ var app = new _vue2.default({
     currentUser: null
   },
   created: function created() {
-    var _this = this;
-
     this.currentUser = this.getCurrentUser();
-    if (this.currentUser) {
-      var query = new _leancloudStorage2.default.Query('AllTodos');
-      query.find().then(function (todos) {
-        var avAllTodos = todos[0];
-        var id = avAllTodos.id;
-        _this.todoList = JSON.parse(avAllTodos.attributes.content);
-        _this.todoList.id = id;
-      }, function (error) {
-        console.log(error);
-      });
-    }
+    this.fetchTodos();
   },
   methods: {
+    fetchTodos: function fetchTodos() {
+      var _this = this;
+
+      if (this.currentUser) {
+        var query = new _leancloudStorage2.default.Query('AllTodos');
+        query.find().then(function (todos) {
+          var avAllTodos = todos[0];
+          var id = avAllTodos.id;
+          _this.todoList = JSON.parse(avAllTodos.attributes.content);
+          _this.todoList.id = id;
+        }, function (error) {
+          console.log(error);
+        });
+      }
+    },
     updataTodos: function updataTodos() {
       var dataString = JSON.stringify(this.todoList);
       var avTodos = _leancloudStorage2.default.Object.createWithoutData('AllTodos', this.todoList.id);
@@ -24574,9 +24577,9 @@ var app = new _vue2.default({
       avTodos.setACL(acl);
       avTodos.save().then(function (todo) {
         _this2.todoList.id = todo.id;
-        alert('save finish');
+        console.log('save finish');
       }, function (error) {
-        alert('save filed');
+        console.log('save filed');
       });
     },
     saveOrUpdateTodos: function saveOrUpdateTodos() {
@@ -24617,6 +24620,7 @@ var app = new _vue2.default({
         _this4.currentUser = _this4.getCurrentUser();
         _this4.user = _this4.formData.username;
       }, function (error) {});
+      this.fetchTodos();
     },
     getCurrentUser: function getCurrentUser() {
       var current = _leancloudStorage2.default.User.current();
