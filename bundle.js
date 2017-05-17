@@ -24543,7 +24543,11 @@ var app = new _vue2.default({
       var dataString = JSON.stringify(this.todoList);
       var AVTodos = _leancloudStorage2.default.Object.extend('AllTodos');
       var avTodos = new AVTodos();
+      var acl = new _leancloudStorage2.default.ACL();
+      acl.setReadAccess(_leancloudStorage2.default.User.current(), true);
+      acl.setWriteAccess(_leancloudStorage2.default.User.current(), true);
       avTodos.set('content', dataString);
+      avTodos.setACL(acl);
       avTodos.save().then(function (todo) {
         // 成功保存之后，执行其他逻辑.
         console.log('保存成功');

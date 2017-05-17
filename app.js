@@ -29,7 +29,11 @@ var app = new Vue({
    		let dataString = JSON.stringify(this.todoList)
    		var AVTodos = AV.Object.extend('AllTodos');
    		var avTodos = new AVTodos();
+   		var acl = new AV.ACL()
+   		acl.setReadAccess(AV.User.current(),true)
+   		acl.setWriteAccess(AV.User.current(),true)
    		avTodos.set('content', dataString);
+   		avTodos.setACL(acl)
        	avTodos.save().then(function (todo) {
        		  // 成功保存之后，执行其他逻辑.
        		  console.log('保存成功');
