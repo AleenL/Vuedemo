@@ -97,13 +97,14 @@ var app = new Vue({
    		AV.User.logIn(this.formData.username, this.formData.password).then((loginedUser)=>{
    			this.currentUser = this.getCurrentUser()
    			this.user = this.formData.username
+   			this.fetchTodos()
    		},function(error){});
-   		this.fetchTodos()
+   			
    	},
    	getCurrentUser: function(){
    		let current = AV.User.current()
    		if(current){
-   		let {id,createdAt,attributes:{username}} = AV.User.current()
+   		let {id,createdAt,attributes:{username}} = current
    		return {id,username,createdAt}
    		}else{
    			return null
