@@ -24531,6 +24531,7 @@ var app = new _vue2.default({
       username: '',
       password: ''
     },
+    msg: '',
     newTodo: '',
     todoList: [],
     currentUser: null
@@ -24540,12 +24541,18 @@ var app = new _vue2.default({
 
     window.onbeforeunload = function () {
       var dataString = JSON.stringify(_this.todoList);
-      window.localStorage.setItem('myTodos', dataString);
+      var AVtodos = _leancloudStorage2.default.object.extend('Alltodos');
+      var avTodos = new AVtodos();
+      avTodos.set('content', dataString);
+      avTodos.save().then(function (todo) {
+        console.log('保存成功');
+      }, function (error) {
+        console.log("save failed");
+      });
     };
-    var oldDataString = window.localStorage.getItem('myTodos');
-    var oldData = JSON.parse(oldDataString);
-
-    this.todoList = oldData || [];
+    var oldUser = window.localStorage.getItem('user');
+    var OldUsername = JSON.parse(oldUser);
+    this.user = OldUsername || '';
     this.currentUser = this.getCurrentUser();
   },
   methods: {
@@ -24569,6 +24576,7 @@ var app = new _vue2.default({
       user.setPassword(this.formData.password);
       user.signUp().then(function (loginedUser) {
         _this2.currentUser = _this2.getCurrentUser();
+        _this2.user = loginedUser.attributes.username;
       }, function (error) {});
     },
     login: function login() {
@@ -24576,6 +24584,7 @@ var app = new _vue2.default({
 
       _leancloudStorage2.default.User.logIn(this.formData.username, this.formData.password).then(function (loginedUser) {
         _this3.currentUser = _this3.getCurrentUser();
+        _this3.user = _this3.formData.username;
       }, function (error) {});
     },
     getCurrentUser: function getCurrentUser() {

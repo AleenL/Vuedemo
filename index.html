@@ -81,6 +81,7 @@
 		</section>
 		<section id="todo" v-if="currentUser">
 			<p><button @click="logout">登出</button></p>
+			<p>你好,{{ user }}</p>
 			<div class='newTask'>
 				<input type="text" v-on:keyup.enter='addTodo' v-model='newTodo'>
 			</div>

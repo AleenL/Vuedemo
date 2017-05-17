@@ -17,6 +17,7 @@ var app = new Vue({
   		username:'',
   		password:''
   	},
+  	msg:'',
 	newTodo:'',
 	todoList:[],
 	currentUser:null,
@@ -24,12 +25,18 @@ var app = new Vue({
    created:function(){
    	window.onbeforeunload = () =>{
    		let dataString = JSON.stringify(this.todoList)
-   		window.localStorage.setItem('myTodos', dataString)
+   		var AVtodos = AV.object.extend('Alltodos');
+   		var avTodos = new AVtodos();
+   		avTodos.set('content',dataString);
+   		avTodos.save().then(function(todo){
+   			console.log('保存成功')
+   		},function(error){
+   			console.log("save failed")
+   		})
    	}
-   	let oldDataString = window.localStorage.getItem('myTodos')
-   	let oldData = JSON.parse(oldDataString)
-
-   	this.todoList = oldData || []
+   	let oldUser = window.localStorage.getItem('user')
+   	let OldUsername = JSON.parse(oldUser)
+   	this.user = OldUsername || ''
    	this.currentUser = this.getCurrentUser();
    },
    methods:{
@@ -51,11 +58,13 @@ var app = new Vue({
    		user.setPassword(this.formData.password);
    		user.signUp().then((loginedUser)=>{
    			this.currentUser = this.getCurrentUser()
+   			this.user = loginedUser.attributes.username
    		},function(error){});
    	},
    	login:function(){
    		AV.User.logIn(this.formData.username, this.formData.password).then((loginedUser)=>{
    			this.currentUser = this.getCurrentUser()
+   			this.user = this.formData.username
    		},function(error){});
    	},
    	getCurrentUser: function(){
