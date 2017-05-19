@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FrankFang/xxx.git"
+    "url": "git+https://github.com/AleenL/Vuedemo"
   },
   "devDependencies": {
     "webpack": "^2.4.1"
