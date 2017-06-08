@@ -62,10 +62,10 @@ var app = new Vue({
         this.weatherShow = false
       }
         let _this = this
-        let cityUrl = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';
+        let cityUrl = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';
         $.getScript(cityUrl, function(script, textStatus, jqXHR) {
         let citytq = remote_ip_info.city
-        let url = "http://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&city=" + citytq + "&day=0&dfc=3";
+        let url = "https://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&city=" + citytq + "&day=0&dfc=3";
         $.ajax({
           url : url,
           dataType : "script",

@@ -24578,10 +24578,10 @@ var app = new _vue2.default({
         this.weatherShow = false;
       }
       var _this = this;
-      var cityUrl = 'http://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';
+      var cityUrl = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';
       $.getScript(cityUrl, function (script, textStatus, jqXHR) {
         var citytq = remote_ip_info.city;
-        var url = "http://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&city=" + citytq + "&day=0&dfc=3";
+        var url = "https://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&city=" + citytq + "&day=0&dfc=3";
         $.ajax({
           url: url,
           dataType: "script",
