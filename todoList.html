@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>React List</title>
+<link rel="stylesheet" href="./CSS/style.css">
+<link rel="stylesheet" href="./CSS/iconfont.css">
+</head>
+<body>
+<div id='app'>
+	<section id="signInAndSignUp" v-if="!currentUser">
+			<div>
+				<div>
+					<label><input class="test-radio" type="radio" v-model="actionType" name="type" value="signUp">注册</label>
+					<label><input class="test-radio" type="radio" v-model="actionType" name="type" value="login">登陆</label>
+				</div>
+				<div class="signUp" v-if="actionType == 'signUp'">
+					<form @submit.prevent = signUp>
+						<div class="formRow">
+						<input placeholder="用户名" type="text" v-model="formData.username">
+						</div>
+						<div class="formRow">
+						<input placeholder="密码" type="password" v-model="formData.password">
+						</div>
+						<div class="formActions">
+							<input type="submit" value="注册">
+						</div>
+					</form>
+				</div>
+				<div class="login" v-if="actionType == 'login'">
+					<form @submit.prevent = login>
+						<div class="formRow">
+						<input placeholder="用户名" type="text" v-model="formData.username">
+						</div>
+						<div class="formRow">
+						<input placeholder="密码" type="password" v-model="formData.password">
+						</div>
+						<div class="formActions">
+						<input type="submit" value="登入">
+						</div>
+					</form>
+				</div>
+			</div>			
+	</section>
+	<section id='todo' v-if="currentUser">
+		<div  class='header_content background_color'>
+			<ul class='user_submit'>
+				<li class='user_message'><i class='iconfont'>&#xe615;</i></li>
+				<li><a href="#">ToDo&Pad</a></li>
+				<li><a  href="#" @click="logout">登出</a></li>
+			</ul>
+		</div>
+		<div class='main_content'>
+			<div class='middle_content floatL'>
+				<div class='middle_rell_content' ref='middleContent'>
+					<div id="todo" class='todo_list' >
+						<div ref='header' @click="showStyle()" class="todolist">
+							<div class='newTask'>
+								<input class='todo_input' type="text"  v-model='newTodo'>
+								<a href="#"  @click='addTodo'>Add A Todo</a>
+							</div>
+							<ol > 
+								<li class="TodoItem" v-for="todo in todoList">
+									<p class='todo_content'><input type="checkbox" ref='todoDone' v-model='todo.done'>{{todo.title}}</p>
+									<span v-if='todo.done'>已完成</span>
+									<span v-else>未完成</span>
+									<button class='delete' @click="removeTodo(todo)">删除</button>
+								</li>
+							</ol>
+						</div>	
+			  		</div>
+				</div>
+			</div>
+			<div class='slide_right_content floatL background_color' ref='rightContent'>
+				<ul class='weather_page slide_right_list'  v-for="weather in weatherList">
+					<li v-html='weather.logo'>{{weather.logo}}</li>
+					<li >{{weather.city}}</li>
+					<li>{{weather.qiwen}}</li>
+					<li>{{weather.weath}}</li>
+					<li>{{weather.cloud}}</li>
+					<li>{{weather.title}}</li>
+				</ul>
+			</div>
+			<div class='slide_left_content floatL background_color'>
+				<ul class='user_list' ref='choose'>
+					<li><i class='iconfont'>&#xe6a4;</i></li>
+					<li><i class='iconfont'>&#xe60b;</i></li>
+					<li class='weather_btn' @click='getWeather()'><i class='iconfont'>&#xe60a;</i></li>
+					<li class='background_btn' @click='chooseStyle()'><i class='iconfont'>&#xe600;</i></li>
+				</ul>
+				<div class='choose_style background_color' ref='choose_style'>
+					<ul class='slide_right_list' @click='chooseColor'>
+						<li >
+							<div data-color='rgb(254,67,101)' style='background-color: rgb(254,67,101)'></div>
+							<p>粉红色</p>
+						</li>
+						<li >
+							<div data-color='rgb(131,175,155)' style='background-color: rgb(131,175,155)'></div>
+							<p>淡青色</p>
+						</li>
+						<li >
+							<div data-color='rgb(69,137,148)' style='background-color: rgb(69,137,148)'></div>
+							<p>湛蓝色</p>
+						</li>
+						<li >
+							<div data-color='#4D6E8D' style='background-color: #4D6E8D'></div>
+							<p>深灰色</p>
+						</li>
+						<li>
+							<div  data-color='rgb(107,194,53)' style='background-color: rgb(107,194,53)'></div>
+							<p>原谅色</p> 
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class='footer_content'></div>
+	</section>	
+</div>
+
+<script src='http://apps.bdimg.com/libs/jquery/1.9.1/jquery.js'></script>
+<script src="bundle.js"></script>
+</body>
+</html>
