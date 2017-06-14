@@ -24578,39 +24578,55 @@ var app = new _vue2.default({
         this.weatherShow = false;
       }
       var _this = this;
-      var cityUrl = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';
-      $.getScript(cityUrl, function (script, textStatus, jqXHR) {
-        var citytq = remote_ip_info.city;
-        var url = "https://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&city=" + citytq + "&day=0&dfc=3";
-        $.ajax({
-          url: url,
-          dataType: "script",
-          scriptCharset: "gbk",
-          success: function success(data) {
-            var _w = window.SWther.w[citytq][0];
-            var cloudtq = _w.d1 + _w.p1 + "级";
-            var tq = _w.t1 + "℃～" + _w.t2 + "℃ ";
-            var logo = null,
-                title = null;
-            if (_w.s1.indexOf('阴') != -1) {
-              logo = "<i class='iconfont'>&#xe60a;</i>";
-              title = '阴天，在不开灯的房间';
-            } else if (_w.s1.indexOf('雨') != -1) {
-              logo = "<i class='iconfont'>&#xe683;</i>";
-              title = '下雨天，和巧克力更配哦';
-            } else if (_w.s1.indexOf('晴') != -1) {
-              logo = "<i class='iconfont'>&#xe683;</i>";
-              title = '故事的小黄花，你还记得吗？';
+      var cityUrl = "https://api.map.baidu.com/location/ip?ak=O6SDTtgTtymLR2UzklNO9eYolcZLXI7Q";
+      $.ajax({
+        url: cityUrl,
+        type: 'get',
+        async: false,
+        dataType: 'jsonp',
+        success: function success(data) {
+          var city = data.content.address;
+          $.ajax({
+            url: "https://free-api.heweather.com/v5/now?",
+            type: 'get',
+            data: {
+              key: 'fd8448c857234882a4805160bd79c00e',
+              city: city
+            },
+            async: false,
+            dataType: 'text',
+            success: function success(data) {
+              data = $.parseJSON(data);
+              var _w = data.HeWeather5['0'].now.cond.txt;
+              var bodywd = data.HeWeather5['0'].now.fl;
+              var hum = data.HeWeather5['0'].now.hum;
+              var wd = data.HeWeather5['0'].now.tmp + '℃';
+              var wind = data.HeWeather5['0'].now.wind.dir + ' ' + data.HeWeather5['0'].now.wind.sc + '级';
+              var logo = null,
+                  title = null;
+              if (_w.indexOf('阴') != -1) {
+                logo = "<i class='iconfont'>&#xe60a;</i>";
+                title = '阴天，在不开灯的房间';
+              } else if (_w.indexOf('雨') != -1) {
+                logo = "<i class='iconfont'>&#xe683;</i>";
+                title = '下雨天，和巧克力更配哦';
+              } else if (_w.indexOf('晴') != -1) {
+                logo = "<i class='iconfont'>&#xe683;</i>";
+                title = '故事的小黄花，你还记得吗？';
+              }
+              _this.weatherList.push({ city: city,
+                weath: _w,
+                cloud: wind,
+                qiwen: wd,
+                logo: logo,
+                title: title
+              });
+            },
+            error: function error(_error) {
+              alert(_error);
             }
-            _this.weatherList.push({ city: citytq,
-              weath: _w.s1,
-              cloud: cloudtq,
-              qiwen: tq,
-              logo: logo,
-              title: title
-            });
-          }
-        });
+          });
+        }
       });
       this.weatherList = [];
     },

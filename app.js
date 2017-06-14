@@ -62,40 +62,56 @@ var app = new Vue({
         this.weatherShow = false
       }
         let _this = this
-        let cityUrl = 'https://int.dpool.sina.com.cn/iplookup/iplookup.php?format=js';
-        $.getScript(cityUrl, function(script, textStatus, jqXHR) {
-        let citytq = remote_ip_info.city
-        let url = "https://php.weather.sina.com.cn/iframe/index/w_cl.php?code=js&city=" + citytq + "&day=0&dfc=3";
+        let cityUrl = "https://api.map.baidu.com/location/ip?ak=O6SDTtgTtymLR2UzklNO9eYolcZLXI7Q";
         $.ajax({
-          url : url,
-          dataType : "script",
-          scriptCharset : "gbk",
-          success : function(data) {
-            let _w = window.SWther.w[citytq][0]
-            let cloudtq = _w.d1 + _w.p1 + "级"
-            let tq =  _w.t1 + "℃～" + _w.t2 + "℃ " 
-            let logo = null,title=null
-              if(_w.s1.indexOf('阴') != -1){
-                logo="<i class='iconfont'>&#xe60a;</i>"
-                title='阴天，在不开灯的房间'
-              }else if(_w.s1.indexOf('雨') != -1){
-                logo="<i class='iconfont'>&#xe683;</i>"
-                title='下雨天，和巧克力更配哦'
-              }else if(_w.s1.indexOf('晴') != -1){
-                logo="<i class='iconfont'>&#xe683;</i>"
-                title='故事的小黄花，你还记得吗？'
-              }
-            _this.weatherList.push(
-            {city:citytq,
-            weath:_w.s1,
-            cloud:cloudtq,
-            qiwen:tq,
-            logo:logo,
-            title:title
-            })
-          }
-        })
-      })
+            url:cityUrl,
+            type:'get',
+            async: false,
+            dataType: 'jsonp',
+            success: function(data){
+              var city = data.content.address
+              $.ajax({
+                url:"https://free-api.heweather.com/v5/now?",
+                type:'get',
+                data:{
+                  key:'fd8448c857234882a4805160bd79c00e',
+                  city:city
+                },
+                async: false,
+                dataType: 'text',
+                success:function(data){
+                  data = $.parseJSON(data)
+                  let _w = data.HeWeather5['0'].now.cond.txt
+                  let bodywd = data.HeWeather5['0'].now.fl
+                  let hum = data.HeWeather5['0'].now.hum
+                  let wd = data.HeWeather5['0'].now.tmp+'℃'
+                  let wind = data.HeWeather5['0'].now.wind.dir+' '+data.HeWeather5['0'].now.wind.sc+'级'
+                  let logo = null,title=null
+                  if(_w.indexOf('阴') != -1){
+                    logo="<i class='iconfont'>&#xe60a;</i>"
+                    title='阴天，在不开灯的房间'
+                  }else if(_w.indexOf('雨') != -1){
+                    logo="<i class='iconfont'>&#xe683;</i>"
+                    title='下雨天，和巧克力更配哦'
+                  }else if(_w.indexOf('晴') != -1){
+                    logo="<i class='iconfont'>&#xe683;</i>"
+                    title='故事的小黄花，你还记得吗？'
+                  }
+                   _this.weatherList.push(
+                    {city:city,
+                    weath:_w,
+                    cloud:wind,
+                    qiwen:wd,
+                    logo:logo,
+                    title:title
+                    })
+                },
+                error:function(error){
+                  alert(error)
+                }
+              })
+            }
+          })
         this.weatherList=[];
     },
     chooseStyle:function(){
